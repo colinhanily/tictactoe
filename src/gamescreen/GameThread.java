@@ -212,14 +212,17 @@ public class GameThread extends Thread implements ActionListener  {
                         switch (gameWon) {
                             case 1:
                                 myLabel.setText("You won the game!");
+                                proxy.setGameState(gameID, 1);
                                 addExitButton();
                                 break mainloop;
                             case 2:
                                 myLabel.setText("You lost the game!");
+                                proxy.setGameState(gameID, 2);
                                 addExitButton();
                                 break mainloop;
                             case 3:
                                 myLabel.setText("Draw!");
+                                proxy.setGameState(gameID, 3);
                                 addExitButton();
                                 break mainloop;
                             default:
@@ -230,14 +233,17 @@ public class GameThread extends Thread implements ActionListener  {
                         switch (gameWon) {
                             case 1:
                                 myLabel.setText("You lost the game!");
+                                proxy.setGameState(gameID, 1);
                                 addExitButton();
                                 break mainloop;
                             case 2:
                                 myLabel.setText("You won the game!");
+                                proxy.setGameState(gameID, 2);
                                 addExitButton();
                                 break mainloop;
                             case 3:
                                 myLabel.setText("Draw!");
+                                proxy.setGameState(gameID, 3);
                                 addExitButton();
                                 break mainloop;
                             default:
