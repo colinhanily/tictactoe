@@ -5,6 +5,7 @@
  */
 package Project;
 
+import gamescreen.GameThread;
 import java.awt.Dimension;
 import project.TTTWebService;
 import project.TTTWebService_Service;
@@ -45,7 +46,8 @@ import javax.swing.ListSelectionModel;
 public class Project implements ActionListener {
 
     private JFrame gameInterface;
-    private JPanel gameSetupPanel, login, signup, statsPage, leagueTable;
+    private JPanel gameSetupPanel, login, signup, statsPage, leagueTable,
+            gamePanel;
     private JButton b1, b2, sign_up, sign_up_clear, sign_up_submit, submit_guess, back_to_game_setup,
             play_again, logout, back, stats, create, join, league, exit_stats_page, refresh;
     private JLabel first_label, guesses, second_label, email_label, user_label,
@@ -61,6 +63,8 @@ public class Project implements ActionListener {
     private String[] myStatsCol, openGamesCol, leagueTableCol;
     private String openGamesData[][];
     private JTable openGames, leagueList;
+    private GameThread gameThread;
+    private Boolean p1;
 
     TTTWebService myLink;
     Project game;
@@ -308,18 +312,30 @@ public class Project implements ActionListener {
             gameInterface.validate();
             gameInterface.repaint();
         } else if (button == create) {
-            myLink.newGame(pid);
+            gid = Integer.parseInt(myLink.newGame(pid));
+            p1 = true;
+            gameThread = new GameThread(p1, gid, pid);
+            gameThread.start();
+            gamePanel = gameThread.getPanel();
+            initGame();
             System.out.println(pid);
 
         } else if (button == refresh) {
             refreshOpenGames();
             System.out.println("REFRESHED");
         } else if (button == join) {
-            int gid = gID();
+            gid = gID();
+            
             String gameJoin = myLink.joinGame(pid, gid);
+            
             if (Integer.parseInt(gameJoin) == 0 || "ERROR-DB".equals(gameJoin)) {
-
+                System.out.println("Error joining game");
             } else {
+                p1 = false;
+                gameThread = new GameThread(p1, gid, pid);
+                gameThread.start();
+                gamePanel = gameThread.getPanel();
+                initGame();
                 //load game screen
             }
         } else if (button == league) {
@@ -332,6 +348,13 @@ public class Project implements ActionListener {
             gameInterface.repaint();
 
         }
+    }
+    
+    private void initGame() {
+        gameInterface.remove(gameSetupPanel);
+        gameInterface.setContentPane(gamePanel);
+        gameInterface.validate();
+        gameInterface.repaint();
     }
 
     public void refreshLeagueTable() {
