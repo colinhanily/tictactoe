@@ -10,13 +10,11 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import static java.lang.Thread.sleep;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import project.TTTWebService;
 import project.TTTWebService_Service;
@@ -27,20 +25,22 @@ import project.TTTWebService_Service;
  */
 public class GameThread extends Thread implements ActionListener  {
     
-    private JPanel myPanel, gridPanel;
+    private JFrame gameInterface;
+    private JPanel myPanel, gridPanel, mainMenu;
     private JLabel myLabel;
     private String gameStatus;
     private TTTWebService proxy;
     private TTTWebService_Service ttt;
-    private Boolean p1, noMoves, otherPlayerMsgSet, noPlayer2;
+    private Boolean p1, noMoves, otherPlayerMsgSet, noPlayer2, runThread;
     private String  reply, lastRow, lastXCoor, lastYCoor;
     private int gameID, userID, lastUID;
     private String[] splitReply, splitRow;
+    private JButton cancel_game, back_menu;
     JButton[][] tttLists;
     int numOfRows = 3;
     int numOfCols = 3;
     
-    public GameThread(Boolean player1, int gid, int uid){
+    public GameThread(Boolean player1, int gid, int uid, JPanel gameSetupPanel, JFrame mainPanel){
         
         p1 = player1;
         gameID = gid;
@@ -49,15 +49,22 @@ public class GameThread extends Thread implements ActionListener  {
         proxy = ttt.getTTTWebServicePort();
         gameStatus = "";
         noPlayer2 = true;
-        
+        runThread = true;
+        cancel_game = new JButton("Cancel Game");
+        back_menu = new JButton("Back to Main Menu");
+        cancel_game.addActionListener(this);
+        back_menu.addActionListener(this);
+        mainMenu = gameSetupPanel;
+        gameInterface = mainPanel;
         
         myPanel = new JPanel();
-        myPanel.setLayout(new GridLayout(2,1));
+        myPanel.setLayout(new GridLayout(3,1));
         gridPanel = new JPanel();
         gridPanel.setLayout(new GridLayout(numOfRows, numOfCols));
         gridPanel.setBorder(new LineBorder(Color.RED, 4));
         
         myLabel = new JLabel(gameStatus, JLabel.CENTER);
+        myPanel.add(cancel_game);
         myPanel.add(myLabel);
         
         tttLists = new JButton[numOfRows][numOfCols];
@@ -95,7 +102,10 @@ public class GameThread extends Thread implements ActionListener  {
                 
             }
         }
-        
+        myPanel.remove(cancel_game);
+        myPanel.setLayout(new GridLayout(2,1));
+        myPanel.validate();
+        myPanel.repaint();
         if (p1){
             myLabel.setText("Take your turn!");
             for (int m =0; m < numOfRows; m++){
@@ -127,7 +137,7 @@ public class GameThread extends Thread implements ActionListener  {
             }
         }
         
-        mainloop: while(true) {
+        mainloop: while(runThread) {
             System.out.println("2: " + reply);
             splitReply = reply.split("\n");
             lastRow = splitReply[splitReply.length - 1];
@@ -152,12 +162,15 @@ public class GameThread extends Thread implements ActionListener  {
                         switch (gameWon) {
                             case 1:
                                 myLabel.setText("You won the game!");
+                                addExitButton();
                                 break mainloop;
                             case 2:
                                 myLabel.setText("You lost the game!");
+                                addExitButton();
                                 break mainloop;
                             case 3:
                                 myLabel.setText("Draw!");
+                                addExitButton();
                                 break mainloop;
                             default:
                                 break;
@@ -167,12 +180,15 @@ public class GameThread extends Thread implements ActionListener  {
                         switch (gameWon) {
                             case 1:
                                 myLabel.setText("You lost the game!");
+                                addExitButton();
                                 break mainloop;
                             case 2:
                                 myLabel.setText("You won the game!");
+                                addExitButton();
                                 break mainloop;
                             case 3:
                                 myLabel.setText("Draw!");
+                                addExitButton();
                                 break mainloop;
                             default:
                                 break;
@@ -196,12 +212,15 @@ public class GameThread extends Thread implements ActionListener  {
                         switch (gameWon) {
                             case 1:
                                 myLabel.setText("You won the game!");
+                                addExitButton();
                                 break mainloop;
                             case 2:
                                 myLabel.setText("You lost the game!");
+                                addExitButton();
                                 break mainloop;
                             case 3:
                                 myLabel.setText("Draw!");
+                                addExitButton();
                                 break mainloop;
                             default:
                                 break;
@@ -211,12 +230,15 @@ public class GameThread extends Thread implements ActionListener  {
                         switch (gameWon) {
                             case 1:
                                 myLabel.setText("You lost the game!");
+                                addExitButton();
                                 break mainloop;
                             case 2:
                                 myLabel.setText("You won the game!");
+                                addExitButton();
                                 break mainloop;
                             case 3:
                                 myLabel.setText("Draw!");
+                                addExitButton();
                                 break mainloop;
                             default:
                                 break;
@@ -244,14 +266,43 @@ public class GameThread extends Thread implements ActionListener  {
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         
-        for (int i = 0; i < numOfRows; i++){
-            for (int j = 0; j < numOfCols; j++){
-                if (button == tttLists[i][j]){
-                    proxy.takeSquare(i, j, gameID, userID);
-                    break;
-                }
+        if(button == cancel_game){
+            if (Integer.parseInt(proxy.deleteGame(gameID, userID)) == 1){
+                exitGame();
             }
+        }else if(button == back_menu){
+            exitGame();
+        }else {
+            for (int i = 0; i < numOfRows; i++){
+                for (int j = 0; j < numOfCols; j++){
+                    if (button == tttLists[i][j]){
+                        if (Integer.parseInt(proxy.checkSquare(i, j, gameID)) == 0){
+                            proxy.takeSquare(i, j, gameID, userID);
+                        }
+                        
+                        break;
+                    }
+                }
+            } 
         }
     }
+    
+    private void exitGame() {
+        runThread = false;
+        gameInterface.remove(myPanel);
+        gameInterface.setContentPane(mainMenu);
+        gameInterface.validate();
+        gameInterface.repaint();
+    }
+    
+    private void addExitButton() {
+        myPanel.setLayout(new GridLayout(3,1));
+        myPanel.add(back_menu);
+        myPanel.validate();
+        myPanel.repaint();
+        
+    }
+    
+    
     
 }

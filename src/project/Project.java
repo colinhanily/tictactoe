@@ -314,7 +314,7 @@ public class Project implements ActionListener {
         } else if (button == create) {
             gid = Integer.parseInt(myLink.newGame(pid));
             p1 = true;
-            gameThread = new GameThread(p1, gid, pid);
+            gameThread = new GameThread(p1, gid, pid, gameSetupPanel, gameInterface);
             gameThread.start();
             gamePanel = gameThread.getPanel();
             initGame();
@@ -332,11 +332,11 @@ public class Project implements ActionListener {
                 System.out.println("Error joining game");
             } else {
                 p1 = false;
-                gameThread = new GameThread(p1, gid, pid);
+                gameThread = new GameThread(p1, gid, pid, gameSetupPanel, gameInterface);
                 gameThread.start();
                 gamePanel = gameThread.getPanel();
+                refreshOpenGames();
                 initGame();
-                //load game screen
             }
         } else if (button == league) {
 
