@@ -33,5 +33,22 @@
         <delete dir="${build.generated.dir}/jax-wsCache/TTTWebService"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/project"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-TTTWebService"/>
+    <target name="wsimport-client-TTTWebService_1" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/TTTWebService_1"/>
+        <property name="wsdl-TTTWebService_1" location="xml-resources/web-service-references/TTTWebService_1/wsdl/localhost_8080/TTTWebApplication/TTTWebService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TTTWebService_1" destdir="${build.generated.dir}/jax-wsCache/TTTWebService_1" wsdl="${wsdl-TTTWebService_1}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/TTTWebApplication/TTTWebService?WSDL" xnocompile="true" xendorsed="true" package="webservice">
+            <depends file="${wsdl-TTTWebService_1}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/TTTWebService_1"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/TTTWebService_1">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-TTTWebService_1" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/TTTWebService_1"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/webservice"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-TTTWebService, wsimport-client-TTTWebService_1"/>
 </project>

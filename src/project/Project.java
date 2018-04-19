@@ -40,12 +40,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.ListSelectionModel;
 
 /**
- *
- * @author col
+ * Authors: Colin Hanily: 14159031
+ *          Padraig Connolly: 14160072 
+ * Group Name: Group 2
+ * 
+ * Main file for the tictactoe project
  */
 public class Project implements ActionListener {
-
-    private JFrame gameInterface;
+    
+    //creating variables for various project elements
+    private JFrame gameInterface; 
     private JPanel gameSetupPanel, login, signup, statsPage, leagueTable,
             gamePanel;
     private JButton b1, b2, sign_up, sign_up_clear, sign_up_submit, submit_guess, back_to_game_setup,
@@ -71,11 +75,11 @@ public class Project implements ActionListener {
 
     public Project() throws IOException {
 
-        ws = new TTTWebService_Service();
-        proxy = ws.getTTTWebServicePort();
-        myLink = this.getProxy();
+        ws = new TTTWebService_Service(); //creating web service instance
+        proxy = ws.getTTTWebServicePort(); //creating proxy to webservice
+        myLink = this.getProxy(); // link to the webservice using the proxy
 
-        gameInterface = new JFrame("Game");
+        gameInterface = new JFrame("Game"); //Jframe for the game interface
         int windowWidth = 600;
         int windowHeight = 700;
         gameInterface.setBounds(500, 100, windowWidth, windowHeight);
@@ -98,9 +102,9 @@ public class Project implements ActionListener {
             "Username", "Wins", "Losses", "Draws"
         };
 
-        openGames = new JTable(listOpenGames(), openGamesCol);
+        openGames = new JTable(listOpenGames(), openGamesCol); //creating JTable instance showing open games
         openGames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane sp = new JScrollPane(openGames);
+        JScrollPane sp = new JScrollPane(openGames); //scroll pane containing openGames JTable
 
         leagueList = new JTable(allPlayerStats(), leagueTableCol);
         leagueList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -123,6 +127,7 @@ public class Project implements ActionListener {
         refresh = new JButton("Refresh Games List");
         back_to_game_setup = new JButton("Back To Main Menu");
 
+        //setting preferred size of each button
         create.setPreferredSize(new Dimension(300, 25));
         join.setPreferredSize(new Dimension(300, 25));
         logout.setPreferredSize(new Dimension(300, 25));
@@ -132,6 +137,7 @@ public class Project implements ActionListener {
         ll.setPreferredSize(new Dimension(350, 250));
         back_to_game_setup.setPreferredSize(new Dimension(300, 25));
 
+        //Creating JLabel instances
         first_label = new JLabel("First Name:", SwingConstants.CENTER);
         second_label = new JLabel("Second Name:", SwingConstants.CENTER);
         email_label = new JLabel("Email Name:", SwingConstants.CENTER);
@@ -145,12 +151,14 @@ public class Project implements ActionListener {
         draws_label = new JLabel("Draws:");
         stats_label = new JLabel("Your Game Stats", SwingConstants.CENTER);
 
+        //Setting label sizes
         wins_label.setPreferredSize(new Dimension(300, 25));
         losses_label.setPreferredSize(new Dimension(300, 25));
         draws_label.setPreferredSize(new Dimension(300, 25));
         exit_stats_page.setPreferredSize(new Dimension(300, 25));
         stats_label.setPreferredSize(new Dimension(300, 25));
 
+        //creating text field instances
         first = new JTextField();
         second = new JTextField();
         email = new JTextField();
@@ -159,6 +167,7 @@ public class Project implements ActionListener {
         user = new JTextField();
         password = new JPasswordField();
 
+        //adding action listeners to buttons
         b1.addActionListener(this);
         b2.addActionListener(this);
         sign_up.addActionListener(this);
@@ -177,6 +186,7 @@ public class Project implements ActionListener {
         sign_up_clear.addActionListener(this);
         stats.addActionListener(this);
 
+        //setting layout of panels and adding functionality
         login.setLayout(new GridLayout(7, 2));
         login.add(user_label);
         login.add(user);
@@ -235,42 +245,41 @@ public class Project implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         if (button == b1) {
-            user.setText("");
+            user.setText(""); //clear text field
             password.setText("");
         } else if (button == b2) {
 
             username = user.getText();
-            pid = myLink.login(user.getText(), password.getText());
+            pid = myLink.login(user.getText(), password.getText()); //setting user pid
 
-            if (pid > 0) {
+            if (pid > 0) { // if successful change panels to the game setup panel
 
                 gameInterface.remove(login);
                 gameInterface.setContentPane(gameSetupPanel);
                 gameInterface.validate();
                 gameInterface.repaint();
             }
-        } else if (button == sign_up) {
+        } else if (button == sign_up) { //cgange panels to registration screen
             gameInterface.remove(login);
             user.setText("");
             password.setText("");
             gameInterface.setContentPane(signup);
             gameInterface.validate();
             gameInterface.repaint();
-        } else if (button == sign_up_clear) {
+        } else if (button == sign_up_clear) { // clear all sign up fields
             first.setText("");
             second.setText("");
-            email.setText("");
             user_signup.setText("");
             password_signup.setText("");
-        } else if (button == sign_up_submit) {
+        } else if (button == sign_up_submit) { //sign up user
             String first_name = first.getText();
             String second_name = second.getText();
             String username_text = user_signup.getText();
             String password_text = password_signup.getText();
-            String register = myLink.register(username_text, password_text, first_name, second_name);
-            if ("ERROR-REPEAT".equals(register) || "ERROR-INSERT".equals(register) || "ERROR-RETRIEVE".equals(register) || "ERROR-DB".equals(register)) {
+            String register = myLink.register(username_text, password_text, first_name, second_name); //register user using web service
+            if ("ERROR-REPEAT".equals(register) || "ERROR-INSERT".equals(register) || "ERROR-RETRIEVE".equals(register) || "ERROR-DB".equals(register)) { //if an errir occurs make no changes
 
-            } else {
+            } else {                //otherwise change panels to login screen and clear text fields
                 first.setText("");
                 second.setText("");
                 user_signup.setText("");
@@ -280,7 +289,7 @@ public class Project implements ActionListener {
                 gameInterface.validate();
                 gameInterface.repaint();
             }
-        } else if (button == back) {
+        } else if (button == back) { //back button to remove registration panel and return to login panel
             gameInterface.remove(signup);
             first.setText("");
             second.setText("");
@@ -289,15 +298,15 @@ public class Project implements ActionListener {
             password_signup.setText("");
             gameInterface.setContentPane(login);
 
-        } else if (button == logout) {
-            pid = 0;
+        } else if (button == logout) { //return to login screen
+            pid = 0; 
             user.setText("");
             password.setText("");
             gameInterface.remove(gameSetupPanel);
             gameInterface.setContentPane(login);
             gameInterface.validate();
             gameInterface.repaint();
-        } else if (button == stats) {
+        } else if (button == stats) { //load the players stats panel
             myGames();
             wins_label.setText("Wins: " + wins);
             losses_label.setText("Losses: " + losses);
@@ -306,13 +315,13 @@ public class Project implements ActionListener {
             gameInterface.setContentPane(statsPage);
             gameInterface.validate();
             gameInterface.repaint();
-        } else if (button == exit_stats_page) {
+        } else if (button == exit_stats_page) { //return from stats panel to game setup panel
             gameInterface.remove(statsPage);
             gameInterface.setContentPane(gameSetupPanel);
             gameInterface.validate();
             gameInterface.repaint();
-        } else if (button == create) {
-            gid = Integer.parseInt(myLink.newGame(pid));
+        } else if (button == create) { // create a new game
+            gid = Integer.parseInt(myLink.newGame(pid)); //setting gameID
             p1 = true;
             gameThread = new GameThread(p1, gid, pid, gameSetupPanel, gameInterface);
             gameThread.start();
@@ -325,9 +334,9 @@ public class Project implements ActionListener {
             System.out.println("REFRESHED");
         } else if (button == join) {
             gid = gID();
-            
+
             String gameJoin = myLink.joinGame(pid, gid);
-            
+
             if (Integer.parseInt(gameJoin) == 0 || "ERROR-DB".equals(gameJoin)) {
                 System.out.println("Error joining game");
             } else {
@@ -339,17 +348,15 @@ public class Project implements ActionListener {
                 initGame();
             }
         } else if (button == league) {
-
             refreshLeagueTable();
-        } else if (button == back_to_game_setup) {
+        } else if (button == back_to_game_setup) { 
             gameInterface.remove(leagueTable);
             gameInterface.setContentPane(gameSetupPanel);
             gameInterface.validate();
             gameInterface.repaint();
-
         }
     }
-    
+
     private void initGame() {
         gameInterface.remove(gameSetupPanel);
         gameInterface.setContentPane(gamePanel);
@@ -357,7 +364,7 @@ public class Project implements ActionListener {
         gameInterface.repaint();
     }
 
-    public void refreshLeagueTable() {
+    public void refreshLeagueTable() { //creates a league table showing all user's wins, losses and draws
 
         leagueList = new JTable(allPlayerStats(), leagueTableCol);
         leagueList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -373,7 +380,7 @@ public class Project implements ActionListener {
 
     }
 
-    public void refreshOpenGames() {
+    public void refreshOpenGames() { // creates a table showing all open games 
 
         openGames = new JTable(listOpenGames(), openGamesCol);
         openGames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -394,20 +401,20 @@ public class Project implements ActionListener {
 
     public String[][] listOpenGames() {
 
-        String[] openGames = myLink.showOpenGames().split("\n");
+        String[] openGames = myLink.showOpenGames().split("\n"); // takes open games data from database and splits it into individual games and stores them in an array
         System.out.println(myLink.showOpenGames());
-        if ("ERROR-NOGAMES".equals(myLink.showOpenGames()) || "ERROR-DB".equals(myLink.showOpenGames())) {
-            String[][] error = new String[0][0];
+        if ("ERROR-NOGAMES".equals(myLink.showOpenGames()) || "ERROR-DB".equals(myLink.showOpenGames())) { // if there is an error
+            String[][] error = new String[0][0]; // create and return an empty 2d array
             return error;
-        } else {
+        } else { // otherwise create an array to hold each games data and store the data of all open games in a 2d array
             String[] details;
             String[][] openGameData = new String[openGames.length][3];
-            for (int i = 0; i < openGames.length; i++) {
+            for (int i = 0; i < openGames.length; i++) { //loop throygh the open games
 
-                details = openGames[i].split(",");
+                details = openGames[i].split(","); //split each games details and store it in an array
 
-                for (int j = 0; j < 3; j++) {
-                    openGameData[i][j] = details[j];
+                for (int j = 0; j < 3; j++) { //loop through each games details
+                    openGameData[i][j] = details[j]; //store each games details in a 2d array, columns represent games, rows represent the games details
                 }
             }
 
@@ -416,21 +423,21 @@ public class Project implements ActionListener {
     }
 
     public int myGames() {
-        wins = 0;
+        wins = 0; //set wins to 0
         losses = 0;
         draws = 0;
         System.out.println("MYSTATS");
-        String[] myGames = myLink.leagueTable().split("\n");
+        String[] myGames = myLink.leagueTable().split("\n"); //split all games games from database into individual games and store each game in an array
         String[] gameDetails;
         System.out.println(myLink.leagueTable());
-        if ("ERROR-NOGAMES".equals(myLink.leagueTable()) || "ERROR-DB".equals(myLink.leagueTable())) {
+        if ("ERROR-NOGAMES".equals(myLink.leagueTable()) || "ERROR-DB".equals(myLink.leagueTable())) { // if error 
             return 0;
-        } else {
+        } else { // otherwise loop through each game and split each games details and store them in an array
 
             for (int i = 0; i < myGames.length; i++) {
                 gameDetails = myGames[i].split(",");
-
-                if (username.equals(gameDetails[1]) && Integer.parseInt(gameDetails[3]) == 1) {
+                //if the username matches a players name, and the game is completed, determine if win loss or draw and add to players statistic    
+                if (username.equals(gameDetails[1]) && Integer.parseInt(gameDetails[3]) == 1) { 
                     wins = wins + 1;
                     System.out.println("win");
                 } else if (username.equals(gameDetails[2]) && Integer.parseInt(gameDetails[3]) == 2) {
@@ -453,7 +460,7 @@ public class Project implements ActionListener {
         return 0;
     }
 
-    public int gID() {
+    public int gID() { //returns the game ID from the selected game from the JTable for open games 
         int row;
         int gameId;
         row = openGames.getSelectedRow();
@@ -470,19 +477,19 @@ public class Project implements ActionListener {
 
     }
 
-    public String[][] allPlayerStats() {
+    public String[][] allPlayerStats() { //sorts all player statistics for creation of the leagueTable
         System.out.println("STATS");
-        String[] games = myLink.leagueTable().split("\n");
+        String[] games = myLink.leagueTable().split("\n"); //create array of all open games from database using the webservice link
         String[] gameDetails;
 
-        ArrayList<String> players = new ArrayList<String>();
+        ArrayList<String> players = new ArrayList<String>(); //create and arrayList to store each players ID
         players.clear();
         System.out.println("Stats: " + myLink.leagueTable());
-        if ("ERROR-NOGAMES".equals(myLink.leagueTable()) || "ERROR-DB".equals(myLink.leagueTable())) {
+        if ("ERROR-NOGAMES".equals(myLink.leagueTable()) || "ERROR-DB".equals(myLink.leagueTable())) { //if error return an empty 2d array with 1 column and 4 rows 
             String playerStats[][] = new String[1][4];
 
             return playerStats;
-        } else {
+        } else {    //otherwise loop through each game and add each unique player to the players arrayList
 
             for (int i = 0; i < games.length; i++) {
                 gameDetails = games[i].split(",");
@@ -498,8 +505,8 @@ public class Project implements ActionListener {
                 }
             }
 
-            String[][] playerStats = new String[players.size()][4];
-            for (int k = 0; k < players.size(); k++) {
+            String[][] playerStats = new String[players.size()][4]; //create array for each players 
+            for (int k = 0; k < players.size(); k++) { //testing player stats by printing to console and initialising values in the array to avoid a null pointer exception
                 playerStats[k][0] = players.get(k);
                 playerStats[k][1] = Integer.toString(0);
                 playerStats[k][2] = Integer.toString(0);
@@ -511,11 +518,15 @@ public class Project implements ActionListener {
 
             }
 
-            for (int i = 0; i < games.length; i++) {
+            for (int i = 0; i < games.length; i++) { //loop through each game and split into individual game data
                 gameDetails = games[i].split(",");
-
-                for (int m = 0; m < players.size(); m++) {
-
+                
+/*loop through each players stats and conpare to each games details, decide if
+the player has a win loss or draw or is not in each game. if the player is in the
+game instance, add 1 to the players wins, losses or draws stats in the playerStats 2d
+array accordingly, otherwise, ignore the game
+*/
+                for (int m = 0; m < players.size(); m++) { 
                     if (playerStats[m][0].equals(gameDetails[1]) && Integer.parseInt(gameDetails[3]) == 1) {
                         playerStats[m][1] = Integer.toString(Integer.parseInt(playerStats[m][1]) + 1);
                         System.out.println("win");
@@ -545,7 +556,7 @@ public class Project implements ActionListener {
                     }
                 }
             }
-            return playerStats;
+            return playerStats; //return the 2d array of players and their stats
         }
 
     }

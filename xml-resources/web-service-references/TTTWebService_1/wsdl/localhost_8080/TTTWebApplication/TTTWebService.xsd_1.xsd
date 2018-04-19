@@ -1,0 +1,250 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://server.james.ttt/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://server.james.ttt/">
+
+<xs:element name="checkSquare" type="tns:checkSquare"/>
+
+<xs:element name="checkSquareResponse" type="tns:checkSquareResponse"/>
+
+<xs:element name="checkWin" type="tns:checkWin"/>
+
+<xs:element name="checkWinResponse" type="tns:checkWinResponse"/>
+
+<xs:element name="deleteGame" type="tns:deleteGame"/>
+
+<xs:element name="deleteGameResponse" type="tns:deleteGameResponse"/>
+
+<xs:element name="getBoard" type="tns:getBoard"/>
+
+<xs:element name="getBoardResponse" type="tns:getBoardResponse"/>
+
+<xs:element name="getGameState" type="tns:getGameState"/>
+
+<xs:element name="getGameStateResponse" type="tns:getGameStateResponse"/>
+
+<xs:element name="joinGame" type="tns:joinGame"/>
+
+<xs:element name="joinGameResponse" type="tns:joinGameResponse"/>
+
+<xs:element name="leagueTable" type="tns:leagueTable"/>
+
+<xs:element name="leagueTableResponse" type="tns:leagueTableResponse"/>
+
+<xs:element name="login" type="tns:login"/>
+
+<xs:element name="loginResponse" type="tns:loginResponse"/>
+
+<xs:element name="newGame" type="tns:newGame"/>
+
+<xs:element name="newGameResponse" type="tns:newGameResponse"/>
+
+<xs:element name="register" type="tns:register"/>
+
+<xs:element name="registerResponse" type="tns:registerResponse"/>
+
+<xs:element name="setGameState" type="tns:setGameState"/>
+
+<xs:element name="setGameStateResponse" type="tns:setGameStateResponse"/>
+
+<xs:element name="showAllMyGames" type="tns:showAllMyGames"/>
+
+<xs:element name="showAllMyGamesResponse" type="tns:showAllMyGamesResponse"/>
+
+<xs:element name="showMyOpenGames" type="tns:showMyOpenGames"/>
+
+<xs:element name="showMyOpenGamesResponse" type="tns:showMyOpenGamesResponse"/>
+
+<xs:element name="showOpenGames" type="tns:showOpenGames"/>
+
+<xs:element name="showOpenGamesResponse" type="tns:showOpenGamesResponse"/>
+
+<xs:element name="takeSquare" type="tns:takeSquare"/>
+
+<xs:element name="takeSquareResponse" type="tns:takeSquareResponse"/>
+
+<xs:complexType name="register">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="surname" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="showMyOpenGames">
+<xs:sequence>
+<xs:element name="uid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="showMyOpenGamesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="takeSquare">
+<xs:sequence>
+<xs:element name="x" type="xs:int"/>
+<xs:element name="y" type="xs:int"/>
+<xs:element name="gid" type="xs:int"/>
+<xs:element name="pid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="takeSquareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteGame">
+<xs:sequence>
+<xs:element name="gid" type="xs:int"/>
+<xs:element name="uid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteGameResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getGameState">
+<xs:sequence>
+<xs:element name="gid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getGameStateResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="setGameState">
+<xs:sequence>
+<xs:element name="gid" type="xs:int"/>
+<xs:element name="gstate" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="setGameStateResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="showAllMyGames">
+<xs:sequence>
+<xs:element name="uid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="showAllMyGamesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="joinGame">
+<xs:sequence>
+<xs:element name="uid" type="xs:int"/>
+<xs:element name="gid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="joinGameResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkWin">
+<xs:sequence>
+<xs:element name="gid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkWinResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="login">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="showOpenGames">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="showOpenGamesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getBoard">
+<xs:sequence>
+<xs:element name="gid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getBoardResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="newGame">
+<xs:sequence>
+<xs:element name="uid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="newGameResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="leagueTable">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="leagueTableResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkSquare">
+<xs:sequence>
+<xs:element name="x" type="xs:int"/>
+<xs:element name="y" type="xs:int"/>
+<xs:element name="gid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkSquareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
